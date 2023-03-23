@@ -1,0 +1,109 @@
+<html>
+    <head>
+        <title>Cypro Freelance</title>
+    </head>
+    <body>
+        <!--
+            TIPS FOR CYBER OR ANYONE ELSE DEVELOPING THIS SITE
+            
+
+
+
+            Use <img id="avatar"> For Avatar
+            Use <p id="username"> For Username, Ex : Proxy, CyberWasDreaming, Josh etc.
+            Use <p id="discrim"> For User's Discriminator, Ex: 1817, 1195, 9090 etc.
+            Use <p id="userID"> For UserID, Ex: 422087909634736160, 853525881032933376, 853525881032933376 etc.
+            Use <p id="email"> For E-Mail Address
+            Use <p id="fullUsername"> For Full Username, Ex: Proxy#1817, CyberWasDreaming#1195, Josh#9090 etc.
+
+
+
+
+
+
+        -->
+        <div id="notLogged">
+        <!-- This is HTML When User Not Logged In -->
+        <input type="button" value="Login With Discord" onclick="location = `https://discord.com/api/oauth2/authorize?client_id=1082980320497893426&redirect_uri=http%3A%2F%2Flocalhost%3A4321%2Fdiscord-auth&response_type=token&scope=identify%20email`">
+        </div>
+        <div id="logged">
+            <!-- This Is HTML When User Logged In -->
+            <h1>Hello Welcome : </h1><h1 id="fullUsername"></h1>
+            <img id="avatar" alt="Avatar">
+            <h1 id="username"></h1>
+            <h1>#</h1>
+            <h1 id="discrim"></h1>
+            <h1 id="email"></h1>
+            <h1 id="userID"></h1>
+        </div>
+    </body>
+    <script>
+        // Set a cookie with the specified name, value, and expiration time (in days)
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${name}=${value};${expires};path=/`;
+}
+
+// Get the value of the cookie with the specified name
+function getCookie(name) {
+  const cookieName = `${name}=`;
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
+  for (let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i];
+    while (cookie.charAt(0) == ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(cookieName) == 0) {
+      return cookie.substring(cookieName.length, cookie.length);
+    }
+  }
+  return '';
+}
+
+// Delete the cookie with the specified name
+function deleteCookie(name) {
+  document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;`;
+}
+
+if(getCookie("token")){
+    // User Is Logged
+    document.getElementById("notLogged").style.display = "none";
+    try{
+        document.getElementById("avatar").src = getCookie("avatar");
+    } catch(err){
+        console.log("stopped : avatar")
+    }
+    try {
+        document.getElementById("username").innerHTML = getCookie("username");
+    } catch (error) {
+        console.log("stopped : username")
+    }
+    try {
+        document.getElementById("discrim").innerHTML = getCookie("discrim");
+    } catch (error) {
+        console.log("stopped : discrim")
+    }
+    try {
+        document.getElementById("userID").innerHTML = getCookie("userID");
+    } catch (error) {
+        console.log("stopped : userID")
+    }
+    try {
+        document.getElementById("email").innerHTML = getCookie("email");
+    } catch (error) {
+        console.log("stopped : email")
+    }
+    try {
+        document.getElementById("fullUsername").innerHTML = getCookie("username")+"#"+getCookie("discrim");
+    } catch (error) {
+        
+    }
+} else {
+    // User Is Not Logged
+    document.getElementById("logged").style.display = "none"
+}
+    </script>
+</html>

@@ -1,0 +1,61 @@
+
+<h1 id="details">Loging In, Please Wait</h1>
+
+
+<script src="/axios.js"></script>
+
+<script>
+function getQuery(name) {
+  const urlFragment = window.location.hash.substr(1); // remove the "#" character from the URL fragment
+  const params = urlFragment.split("&");
+  for (let i = 0; i < params.length; i++) {
+    const pair = params[i].split("=");
+    if (pair[0] === name) {
+      return decodeURIComponent(pair[1]);
+    }
+  }
+  return null;
+}
+
+
+// Set a cookie with the specified name, value, and expiration time (in days)
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = `expires=${date.toUTCString()}`;
+  document.cookie = `${name}=${value};${expires};path=/`;
+}
+
+
+
+const token = getQuery("access_token");
+
+axios({
+  method: 'GET',
+  url: 'https://discord.com/api/users/@me',
+  headers: {
+    Authorization: `Bearer ${token}`
+  },
+  params: {
+    include_email: true
+  }
+})
+.then(response => {
+  const user = response.data;
+  document.getElementById("details").innerHTML = "Logged In Successfully, Redirecting To Dashboard"
+  setCookie("token", token,7)
+  setCookie("userID",user.id,7)
+  setCookie("email",user.email,7)
+  setCookie("username",user.username,7)
+  setCookie("discrim",user.discriminator,7)
+  setCookie("avatar",`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,7)
+  setTimeout(()=>{
+    location = "/"
+  },2000)
+})
+.catch(error => {
+  document.getElementById("details").innerHTML = `Error Occurred, Please Report It <a href="https://discord.gg/QY7tgMne">Here</a> : <br> `+error
+});
+
+
+</script>
